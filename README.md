@@ -27,8 +27,251 @@
 |[vim-airline](https://vimawesome.com/plugin/vim-airline-superman)|lean & mean status/tabline for vim that's light as air|
 |...|[vimawesome](https://vimawesome.com/)|
 
-### 关于本人折腾Vim的记录
+### 关于本人之前折腾Vim的记录
 [Vim折腾帖子](https://github.com/itgoyo/500Days-Of-Github/issues?q=vim)
 
+### Day01
+#### 下载安装NeoVim
+[NeoVim官网](https://github.com/neovim/neovim)
+- Download nvim-macos.tar.gz
+- Extract: tar xzvf nvim-macos.tar.gz
+- Run ./nvim-osx64/bin/nvim
+因为没有桌面快捷启动方式，于是我就在`.zshrc`文件里面映射了快捷启动方式
+```
+# NeoVim
+alias nvim='./nvim-osx64/bin/nvim'
+```
+每次我只需要在终端里面输入`nvim`就刻意快速打开`NeoVim`了
 
+#### 与Vim的区别
+
+```
+~/.vimrc 对应 $CONFIG_HOME/nvim/init.vim
+
+~/.vim 对应 $CONFIG_HOME/nvim
+
+```
+
+Neovim 是能使用 vim 的配置文件的，如果有 vim 的配置，直接软链接就好：
+
+```
+$(~) ln -s ~/.vim .config/nvim
+$(~) ln -s ~/.vimrc .config/nvim/init.vim
+
+```
+
+如果想 nvim 单独使用一个配置，那就在 .config 下创建配置文件就行：
+
+```
+$(~) mkdir .config/nvim
+$(~) touch .config/nvim/init.vim
+```
+之前`spf-13`项目用的插件安装方式是`Vundle`，为了体验别的方式这里就更换成为`VimPlug`来安装插件
+第一天先安装一些常用的插件：
+```
+- Finishing ... Done!                                                                                                 │~
+- fzf: Already installed                                                                                              │~
+- ctrlp.vim: Already installed                                                                                        │~
+- vim-airline: Already installed                                                                                      │~
+- tagbar: Already installed                                                                                           │~
+- nerdtree: Already installed                                                                                         │~
+- fzf.vim: Already installed                                                                                          │~
+- vim-instant-markdown: Already installed                                                                             │~
+- gruvbox: Already installed
+- vim-easymotion: Already installed
+
+```
+
+#### init.vim(.config/nvim/init.vim)
+```
+
+"设置相对行号
+set relativenumber
+
+:let mapleader=','
+:let g:mapleader = ','
+
+
+call plug#begin('~/.vim/plugged')
+
+" vim-airline
+Plug 'vim-airline/vim-airline'
+
+" colorscheme gruvbox
+Plug 'morhetz/gruvbox'
+
+" nerdtree
+Plug 'preservim/nerdtree'
+
+" Tagbar
+Plug 'majutsushi/tagbar'
+
+" ctrlp
+Plug 'ctrlpvim/ctrlp.vim'
+
+" MarkdownPreview
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+
+" Fzf Vim
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+set rtp+=/usr/local/opt/fzf
+Plug '/usr/local/opt/fzf'
+
+
+" easymotion
+Plug 'easymotion/vim-easymotion'
+
+call plug#end()
+
+
+exec 'cd ' . fnameescape('/Users/itgoyo/Documents/Vim')
+
+
+" 切换buffer
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
+
+
+" use ctrl+hjkl switch window
+" nnoremap <C-l> <C-w>l   这种用法没效果因为已经被方向快捷键拦截了
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+"使用leader+w 直接保存
+inoremap <leader>w <Esc>:w<cr>
+noremap <leader>w :w<cr>
+
+"noremap <D-S> :w<cr>
+"noremap <leader>s :w<cr>
+":noremap <leader>s :w<cr>
+:noremap <leader>p :MarkdownPreview<cr>
+
+"stackoverflow 上面绑定ctrl+s 为保存的回答
+
+noremap <silent> <C-S>          :update<CR>
+vnoremap <silent> <C-S>         <C-C>:update<CR>
+inoremap <silent> <C-S>         <C-O>:update<CR>
+
+"解决insert模式切换回normal模式下延迟的问题
+set timeoutlen=1 ttimeoutlen=0
+
+
+" install easy-motion
+" Plugin 'easymotion/vim-easymotion'
+
+
+
+
+"Mode Settings
+
+let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+
+"Cursor settings:
+
+"  1 -> blinking block
+"  2 -> solid block
+"  3 -> blinking underscore
+"  4 -> solid underscore
+"  5 -> blinking vertical bar
+"  6 -> solid vertical bar
+
+
+
+"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+"let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+
+
+
+"MarkdownPreview
+"let g:instant_markdown_port = 8888
+
+" 退出插入模式指定类型的文件自动保存
+au InsertLeave *.go,*.sh,*.php,*.java,*.py,*.md,*.txt,*.html write
+
+" colorscheme
+set bg=dark
+colorscheme gruvbox
+
+" NERDTree
+ map <C-e> :NERDTreeToggle<CR>
+
+" Tagbar
+ nmap <C-t> :TagbarToggle<CR>
+ " Tagbar
+nmap <silent> <leader>tb :TagbarToggle<cr>
+
+" fzf
+" Always enable preview window on the right with 60% width
+let g:fzf_preview_window = 'right:60%'
+
+nmap <C-z> :Files<CR>
+nmap <C-u> :Buffers<CR>
+
+
+" <Leader>f{char} to move to {char}
+"nmap <Leader> f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f)
+
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+
+
+" 切换buffer
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
+
+
+" 让输入上方，搜索列表在下方
+    let $FZF_DEFAULT_OPTS = '--layout=reverse'
+
+    " 打开 fzf 的方式选择 floating window
+    let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
+
+    function! OpenFloatingWin()
+  let height = &lines - 3
+  let width = float2nr(&columns - (&columns * 2 / 10))
+  let col = float2nr((&columns - width) / 2)
+
+  " 设置浮动窗口打开的位置，大小等。
+  " 这里的大小配置可能不是那么的 flexible 有继续改进的空间
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': height * 0.3,
+        \ 'col': col + 30,
+        \ 'width': width * 2 / 3,
+        \ 'height': height / 2
+        \ }
+
+  let buf = nvim_create_buf(v:false, v:true)
+  let win = nvim_open_win(buf, v:true, opts)
+
+  " 设置浮动窗口高亮
+  call setwinvar(win, '&winhl', 'Normal:Pmenu')
+
+  setlocal
+        \ buftype=nofile
+        \ nobuflisted
+        \ bufhidden=hide
+        \ nonumber
+        \ norelativenumber
+        \ signcolumn=no
+endfunction
+
+
+set modifiable
+```
 

@@ -1,4 +1,4 @@
-<div align=center><img width="150" height="150" src="https://gitee.com/itgoyo/PicGoRes/raw/master/img/Vim.png"/></div>
+<div align=center><img src="https://gitee.com/itgoyo/PicGoRes/raw/master/img/Vim.png"/></div>
 
 # DeliberatePracticeVimIn30Days
 刻意练习Vim30天能达到什么效果，是麻瓜，还是成神？

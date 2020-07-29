@@ -280,6 +280,12 @@ set modifiable
 ### Day2
 #### 自定义一些常用的快捷键
 自定义一些常用的快捷键，但是遇到<Leader>按键不起作用的问题，查找了很多资料都没找到是什么原因，最后才发现原来是自己的操作不当引起的，这个<Leader>不是组合按键而是，静默按1s后组合触发按键
+
+发现在`iterm2`里面启动的`nvim`设置`meta`键位是没有作用的，这个是一直存在的问题，查找一下资料看看有没有什么比较好的解决方式
+
+解决方式：[在iterm设置中将left Option设置成Esc+这样子就可以了]
+![](https://gitee.com/itgoyo/PicGoRes/raw/master/img/20200729160234.png)
+
 ```
 silent 代表不回显，静默的意思
 
@@ -295,9 +301,6 @@ set relativenumber
 
 :let mapleader = ","
 :let g:mapleader = ","
-
-":let mapleader = "\<Space>"
-":let g:mapleader = "\<Space>"
 
 call plug#begin('~/.vim/plugged')
 
@@ -329,17 +332,14 @@ Plug '/usr/local/opt/fzf'
 " easymotion
 Plug 'easymotion/vim-easymotion'
 
+" wakatime
+Plug 'wakatime/vim-wakatime'
+
+
 call plug#end()
 
 
 exec 'cd ' . fnameescape('/Users/itgoyo/Documents/Vim')
-
-
-" 切换buffer
-:noremap <silent> [b :bprevious<CR>
-:noremap <silent> ]b :bnext<CR>
-:noremap <silent> [B :bfirst<CR>
-:noremap <silent> ]B :blast<CR>
 
 
 
@@ -425,21 +425,24 @@ nmap <C-u> :Buffers<CR>
 
 
 " <Leader>f{char} to move to {char}
-"nmap <Leader> f <Plug>(easymotion-overwin-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
 
 " s{char}{char} to move to {char}{char}
 nmap s <Plug>(easymotion-overwin-f)
 
-nmap <Leader>w <Plug>(easymotion-overwin-w)
+"nmap <Leader>w <Plug>(easymotion-overwin-w)
 
 
 
 " 切换buffer
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
+" Buffer Navigation
+nmap <C-[> :bprevious<CR>
+nmap <C-]> :bnext<CR>
+nmap <M-[> :bprevious<CR>
+nmap <M-]> :bnext<CR>
 
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 
 
 " 让输入上方，搜索列表在下方
@@ -495,7 +498,7 @@ syntax on " 自动语法高亮
 "<Space> 插入空格
 "<Tab> 插入 Tab
 "<CR> 等于 <Enter>
-"<D>
+"<D> Command
 
 
 " 窗口快速切换切换
@@ -505,41 +508,21 @@ nmap K <C-w>k
 nmap L <C-w>l
 nmap W <C-w>w
 " 括号自动不全
-inoremap ( ()<Esc>i
-inoremap [ []<Esc>i
-inoremap { {}<Esc>i
+inoremap ( (<CR>)<Esc>O
+inoremap [ [<CR>]<Esc>O
+inoremap { {<CR>}<Esc>O
 
 
-nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 
-" Source ~/.config/nvim/init.vim
-nnoremap <Leader>sv :source $MYVIMRC<CR>
+" 時間顯示 http://vim.wikia.com/wiki/Insert_current_date_or_time
+function! DateAndTime()
+    redraw
+    echohl WarningMsg
+        echo strftime("   ⏰ 現在時間 %Y-%m-%d %H:%M:%S ⏰ ")
+    echohl NONE
+endfunction
+nnoremap <M-t> :call DateAndTime()<CR>
 
-" Change CWD locally and print CWD
-nnoremap <silent> <Leader>cd :lcd %:p:h<CR>:pwd<CR>
-
-" Save file if has no change
-nnoremap <Leader>s :update<CR>
-
-" Save and Quit All files
-nnoremap <silent> XX :xall<CR>
-
-" Save All files
-nnoremap <Leader>w :wall<CR>
-
-" Quit file if has no change
-nnoremap <silent> <Leader>q :q<CR>
-
-" Force quit file
-nnoremap <silent> Q :q!<CR>
-
-" Quit all opened files
-nnoremap <silent> <C-q> :qa<CR>
-
-" Quick vsplit new file
-nnoremap <silent> <Leader>n :vnew<CR>
-nnoremap <silent> <Leader>N :vnew<Space>
-
-" Create file under cursor in vsplit
-nnoremap <Leader>fv :vsplit <cfile><CR>,
+" 输入xtime 然后按一下tab按键就可以显示时间了 2020-07-29 16:23:13
+iab xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>
 ```

@@ -286,13 +286,26 @@ set modifiable
 解决方式：[在iterm设置中将left Option设置成Esc+这样子就可以了]
 ![](https://gitee.com/itgoyo/PicGoRes/raw/master/img/20200729160234.png)
 
-```
 silent 代表不回显，静默的意思
 
-然后按下键盘的 , 一秒钟之后然后按其它按键
+还有学习到了一些简单的Vim功能脚本的使用方法
 
-之前的Leader一直是可以的，只是自己的操作方式没对而已
+比如：
 ```
+function! DateAndTime()
+    redraw
+    echohl WarningMsg
+        echo strftime("   ⏰ 現在時間 %Y-%m-%d %H:%M:%S ⏰ ")
+    echohl NONE
+endfunction
+
+
+" 输入xtime 然后按一下tab按键就可以显示时间了 2020-07-29 16:23:13
+iab xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>
+
+nnoremap <M-t> :call DateAndTime()<CR
+```
+就能简单快速的输出当前的时间
 
 第二天的`init.vim`文件如下
 ```
@@ -538,3 +551,67 @@ iab xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>
 配置相关的已经提交到Github上面去了
 
 现在终于可以正式入门Vim还有自定义一些属于自己的快捷键了，美滋滋，下面的日子就是学习快速跳转，还有窗口切换相关的事情，再者就是Vim的快捷键训练
+
+#### [使用 vim-pathogen 进行插件管理](https://www.cnblogs.com/gtarcoder/p/4632325.html)转载自农民伯伯
+
+　　使用 vim 的插件管理器 pathogen 进行 vim 的插件管理。
+
+1. pathogen 管理插件
+　　 pathogen 让每个插件占有一个单独的目录，解决了文件分散的问题。安装完 pathogen 之后，只需要在～/.vim/ 目录下新建一个目录～/.vim/bundle/，并将要安装的所有插件放在～/.vim/bundle / 目录下即可以使用（直接在～/.vim/bundle 目录下 git clone xxx.git 即可)。如果要删除某个插件，只需要将～/.vim/bundle/ 目录下对应的插件目录删除即可。如果想保持某个插件为最新版本，直接从插 件的仓库 checkout 一份代码到 bundle 目录即可。
+
+2. 安装 vim 的插件管理器 pathogen
+
+从 github 上获得 pathogen，解压到～/.vim 目录下，将 pathogen 中的 autoload 目录拷贝到～/.vim  目录下。
+
+$cd ~/.vim
+
+$mkdir bundle &&  mkdir autoload && cd bundle
+
+$git clone https://github.com/tpope/vim-pathogen.git
+
+$cp -r  pathogen/autoload  ~/.vim
+
+3. 在.vimrc 中设置 pathogen
+
+在～/.vimrc 文件里，filetype plugin indent on 之前的任何地方，加入这句：call pathogen#infect () 
+
+4. 安装新插件
+
+例如 安装 NERDTree
+
+例如，要下载安装 NERDTree 插件，只需要进入到～/.vim/bundle/ 目录，然后执行以下命令：
+
+　　git clone http://github.com/scrooloose/nerdtree.git  
+
+下载完成后，会看到～/.vim/bundle/ 目录下会多出一个新的目录：nerdtree
+
+OK！NERDTree 插件已经安装完成了！可以看到这种方式比传统的 vim 插件安装方式简单多了！
+
+而要卸载该插件也非常简单，只需要在～/.vim/bundle/ 目录下删除 nerdtree 目录即可，干净利落！
+
+要更新该插件到最新版本，只需要进入到该目录～/.vim/bundle/nerdtree/，并执行以下命令：
+
+　　git pull origin  
+
+当然这种安装和更新插件的方法只适用于代码仓库支持 git 的方法。
+
+对于无法用 git 下载的插件，就更新 bundle 里的那个以插件名为名的目录就好。
+
+#### Vim-Go
+到Go官网下载安装Go得安装包，然后在自己的`.zshrc`文件里面配置好环境变量
+
+在`init.vim`中添加
+```
+" Vim-GO
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+```
+export PATH=$HOME/bin:/usr/local/go/bin:$PATH
+```
+然后在`Vim`里面`:GoInstallB...`
+如果提示`guru，依然提示 "could not find 'guru'. Run :GoInstallBinaries to fix it`
+
+```
+ go get   golang.org/x/tools/cmd/guru
+ go build golang.org/x/tools/cmd/guru
+ mv guru $(go env GOROOT)/bin
+```

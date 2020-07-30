@@ -599,14 +599,16 @@ OK！NERDTree 插件已经安装完成了！可以看到这种方式比传统的
 
 #### Vim-Go
 到Go官网下载安装Go得安装包，然后在自己的`.zshrc`文件里面配置好环境变量
+```
+export PATH=$HOME/bin:/usr/local/go/bin:$PATH
+```
 
 在`init.vim`中添加
 ```
 " Vim-GO
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 ```
-export PATH=$HOME/bin:/usr/local/go/bin:$PATH
-```
+
 然后在`Vim`里面`:GoInstallB...`
 如果提示`guru，依然提示 "could not find 'guru'. Run :GoInstallBinaries to fix it`
 

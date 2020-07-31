@@ -88,7 +88,7 @@ let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 "let g:instant_markdown_port = 8888
 
 " 退出插入模式指定类型的文件自动保存
-au InsertLeave *.go,*.sh,*.php,*.java,*.py,*.md,*.txt,*.html write
+au InsertLeave * write
 
 
 
@@ -179,6 +179,9 @@ Plug 'mileszs/ack.vim'
 
 " Vim-Startify
 Plug 'mhinz/vim-startify'
+
+" Vim-Surround
+Plug 'tpope/vim-surround'
 
 call plug#end()
 

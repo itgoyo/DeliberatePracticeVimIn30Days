@@ -617,3 +617,23 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
  go build golang.org/x/tools/cmd/guru
  mv guru $(go env GOROOT)/bin
 ```
+### Day04
+
+- Vim-Ranger
+```
+" Vim-Ranger
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+```
+
+- Vim-Rainbow 
+```
+" Rainbow
+Plug 'luochen1990/rainbow'
+```
+
+- Vim-css-color
+```
+" Color
+Plug 'ap/vim-css-color'
+```

@@ -1,5 +1,10 @@
+
 "设置相对行号
 set relativenumber
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Keymap
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "let mapleader = ","
 "let g:mapleader = ","
@@ -8,6 +13,7 @@ exec 'cd ' . fnameescape('/Users/itgoyo/Documents/Vim')
 
 let mapleader = ","
 
+nmap <leader>mo :set modifiable<cr>
 set modifiable
 
 syntax on " 自动语法高亮
@@ -26,6 +32,8 @@ syntax on " 自动语法高亮
 "<CR> 等于 <Enter>
 "<D> Command
 
+" ACK
+map <C-a> :Ack<space>
 
 " 窗口快速切换切换
 nmap J <C-w>j
@@ -33,20 +41,24 @@ nmap H <C-w>h
 nmap K <C-w>k
 nmap L <C-w>l
 nmap W <C-w>w
+nmap C <C-w>c
+
 " 括号自动不全
-inoremap ( (<CR>)<Esc>O
-inoremap [ [<CR>]<Esc>O
+inoremap ( ()<Esc>i
+inoremap [ []<Esc>i
 inoremap { {<CR>}<Esc>O
 
 :noremap <leader>l <C-w>l
 "使用leader+w 直接保存
 "nmap <leader>w :w!<cr>
-nmap <leader>z :bnext<cr>
+nmap <leader>q :wqall!<cr>
 
 "解决insert模式切换回normal模式下延迟的问题 这货会影响leader的事件触发，最好别用 浪费我很多时间
 "set timeoutlen=1 ttimeoutlen=0
 
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => 自定义Keymap
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <M-y>  :call AddTitle()<CR>
 nnoremap <M-t> :call DateAndTime()<CR>
 
@@ -79,7 +91,7 @@ let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 "let g:instant_markdown_port = 8888
 
 " 退出插入模式指定类型的文件自动保存
-au InsertLeave *.go,*.sh,*.php,*.java,*.py,*.md,*.txt,*.html write
+au InsertLeave * write
 
 
 
@@ -109,12 +121,23 @@ nmap s <Plug>(easymotion-overwin-f)
 
 nnoremap <leader>a :echo("\<leader\> works! It is set to <leader>")<CR>
 
+" Vim-Ranger
+map <leader>r :Ranger<CR>.
+g:ranger_command_override
+let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
+set shell=bash
 
 
 " 切换buffer
 " Buffer Navigation
-nmap <C-[> :bprevious<CR>
-nmap <C-]> :bnext<CR>
+"nmap <C-[> :bprevious<CR> 不知道mac hhkb下面是什么原因，如果是这个组合键的话，Caps映射的ESC会经常触发这个所以打算更换快捷键
+"nmap <C-]> :bnext<CR>
+nmap <M-[> :bprevious<CR>
+nmap <M-]> :bnext<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin('~/.vim/plugged')
 
@@ -152,9 +175,38 @@ Plug 'wakatime/vim-wakatime'
 " indent
 Plug 'nathanaelkane/vim-indent-guides'
 
+" COC
+" Use release branch (recommend)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Vim-GO
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+" ACK
+Plug 'mileszs/ack.vim'
+
+" Vim-Startify
+Plug 'mhinz/vim-startify'
+
+" Vim-Surround
+Plug 'tpope/vim-surround'
+
+" Vim-Ranger
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+
+" Rainbow
+Plug 'luochen1990/rainbow'
+
+" Color
+Plug 'ap/vim-css-color'
+
+
 call plug#end()
 
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Methods
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 " 让输入上方，搜索列表在下方
@@ -227,3 +279,18 @@ let g:indent_guides_enable_on_vim_startup = 1
 " colorscheme
 set bg=dark
 colorscheme gruvbox
+
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+autocmd FileType go nmap <leader>r <Plug>(go-run) %<CR>
+autocmd FileType go nmap <leader>b <Plug>(go-build) %<CR>
+autocmd FileType go nmap <leader>t <Plug>(go-test) %<CR>
+
+
+let g:rainbow_active = 1
+

@@ -204,6 +204,18 @@ Plug 'ap/vim-css-color'
 
 call plug#end()
 
+
+" ACK
+Plug 'mileszs/ack.vim'
+
+" Vim-Startify
+Plug 'mhinz/vim-startify'
+
+" Vim-Surround
+Plug 'tpope/vim-surround'
+
+call plug#end()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Methods
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -294,3 +306,4 @@ autocmd FileType go nmap <leader>t <Plug>(go-test) %<CR>
 
 let g:rainbow_active = 1
 
+autocmd FileType go nmap <leader>t <Plug>(go-test) %<CR>
